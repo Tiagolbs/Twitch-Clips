@@ -4,8 +4,13 @@ from twitch import TwitchClient
 from twitchAPI import TwitchApiConnection
 from moviepy.editor import TextClip, CompositeVideoClip, VideoFileClip, concatenate_videoclips
 
-#Faz requisição dos clips mais vistos no dia, do jogo $game
 def clips_request(gameName, clipsLimit, clipsPeriod):
+    """ Faz requisição dos clips mais vistos na Twitch.tv, em determinado periodo, do jogo escolhido
+        :param gameName: nome do jogo
+        :param clipsLimit: numero de clips a serem baixados
+        :param clipsPeriod: periodo dos clips a serem baixados  (day, week, month, all)
+    """
+
     try:
         client = TwitchApiConnection()
     except:
@@ -21,6 +26,10 @@ def clips_request(gameName, clipsLimit, clipsPeriod):
     clips_download(clips)
 
 def clips_download(clips):
+    """ Faz o download dos clips em formato .mp4, para a pasta videos
+        :param clips: retorno da requisição da API da Twitch.tv
+    """
+
     file_names = []
     file_names_clips = []
 
@@ -41,19 +50,28 @@ def clips_download(clips):
     concatenate_clips(file_names, file_names_clips)
 
 def concatenate_clips(file_names, file_names_clips):
+    """ Adiciona um texto em cada clip, com o nome do autor e o título do clip, então compila todos os clips em um único video
+        :param file_names: nome dos arquivos dos clips baixados
+        :param file_names_clips: texto para escrever nos clips
+    """
+
     clips_text = []
 
     for i in range(len(file_names)):
         clip = VideoFileClip("videos/" + file_names[i] + ".mp4")
-        clip_subclip = clip.subclip().resize( (1920,1080) )
+        clip = clip.subclip().resize( (1920,1080) )
 
         txt_clip = TextClip(txt = file_names_clips[i], fontsize = 109, font = "Tahoma-Bold", color = 'white').resize(0.33).set_position('bottom').set_duration(5)  
 
         try:
-            video = CompositeVideoClip([clip_subclip, txt_clip])
+            video = CompositeVideoClip([clip, txt_clip])
         except:
-            print("Erro ao adicionar texto ao clip")
-            exit(1)
+            print("Erro ao adicionar descricao ao clip", file_names[i])
+            aux = input("Deseja continuar? (y/n): ")
+            if aux == "y":
+                video = clip
+            else:
+                exit(1)
 
         clips_text.append(video)
     
