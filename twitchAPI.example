@@ -1,0 +1,5 @@
+from twitch import TwitchClient
+
+def TwitchApiConnection():
+    client = TwitchClient(client_id='')
+    return(client)
