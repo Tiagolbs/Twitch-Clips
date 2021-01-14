@@ -1,7 +1,7 @@
 from twitchUtils import clips_request
 
 def menu():
-    print("NOME EXAMPLE\n")
+    print("Twitch Clips\n")
     gameName = input("Game name: ")
     clipsLimit = input("How many clips to download? (max 100): ")
     clipsPeriod = input("Clips Period (day, week, month, all): ")
