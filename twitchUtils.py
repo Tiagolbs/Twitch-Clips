@@ -26,7 +26,7 @@ def clips_request(gameName, clipsLimit, clipsPeriod):
     clips_download(clips)
 
 def clips_download(clips):
-    """ Faz o download dos clips em formato .mp4, para a pasta videos
+    """ Faz o download dos clips em formato .mp4
         :param clips: retorno da requisição da API da Twitch.tv
     """
 
